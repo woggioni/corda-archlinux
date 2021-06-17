@@ -1,17 +1,18 @@
 # Contributor: Walter Oggioni <walter.oggioni@r3.com>                
 # Maintainer: Walter Oggioni <walter.oggioni@r3.com>
-pkgname=corda-cli-git
-_basename="${pkgname%-git}"
-pkgver=67.0791d7a
+pkgname=corda-cli-dev-git
+_basename="${pkgname%-dev-git}"
+pkgver=149.9da441e
 pkgrel=1
 pkgdesc="Command Line Interface Utility to deploy a Corda Network"
 arch=('i686' 'x86_64' 'armv7h' 'aarch64')
 url="https://github.com/corda/corda-cli"
 license=('GPL')
-makedepends=('unzip')
-depends=('java-runtime')
+makedepends=('unzip' 'gradle' 'java-environment')
+depends=('java-environment>=11')
 source=(git+ssh://git@github.com/corda/corda-cli.git)
 md5sums=('SKIP')
+conflicts=('corda-cli' 'corda-cli-git' 'corda-cli-dev')
 
 pkgver() {
   cd $srcdir/$_basename
@@ -20,11 +21,11 @@ pkgver() {
 
 build() {
     cd $srcdir/$_basename
-    ./gradlew installDist
+    ./gradlew corda-cli-developer:installDist
 }
 
 package() {
-  _build="$srcdir/$_basename/build/install/$_basename"
+  _build="$srcdir/$_basename/corda-cli-developer/build/install/$_basename"
   install -d "$pkgdir/usr/share/java/$_basename/"{bin,lib}
   install -m644 "$_build/lib/"*.jar "$pkgdir/usr/share/java/$_basename/lib"
   install -m755 "$_build/bin/$_basename" "$pkgdir/usr/share/java/$_basename/bin"
