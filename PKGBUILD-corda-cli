@@ -1,0 +1,51 @@
+# Contributor: Walter Oggioni <walter.oggioni@r3.com>                
+# Maintainer: Walter Oggioni <walter.oggioni@r3.com>
+pkgbase=corda-cli
+pkgver=150.7dd7e0f
+pkgrel=1
+pkgdesc="Command Line Interface Utility to deploy a Corda Network"
+arch=('i686' 'x86_64' 'armv7h' 'aarch64')
+url="https://github.com/corda/corda-cli"
+license=('GPL')
+makedepends=('unzip' 'gradle' 'java-environment')
+depends=('java-environment>=11')
+source=('git+ssh://git@github.com/corda/corda-cli.git#branch=woggioni/cpb')
+md5sums=('SKIP')
+
+pkgver() {
+  cd $srcdir/$pkgbase
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+    cd $srcdir/$pkgbase
+    ./gradlew corda-cli:installDist corda-cli-developer:installDist
+}
+
+_package-git() {
+  conflicts=('corda-cli' 'corda-cli-dev' 'corda-cli-dev-git')
+  _build="$srcdir/$pkgbase/corda-cli/build/install/$pkgbase"
+  install -d "$pkgdir/usr/share/java/$pkgbase/"{bin,lib}
+  install -m644 "$_build/lib/"*.jar "$pkgdir/usr/share/java/$pkgbase/lib"
+  install -m755 "$_build/bin/$pkgbase" "$pkgdir/usr/share/java/$pkgbase/bin"
+  install -d "$pkgdir/usr/bin"
+  ln -s "/usr/share/java/$pkgbase/bin/$pkgbase" "$pkgdir/usr/bin/$pkgbase" 
+}
+
+_package-dev-git() {
+  conflicts=('corda-cli' 'corda-cli-git' 'corda-cli-dev')
+  _build="$srcdir/$pkgbase/corda-cli-developer/build/install/$pkgbase"
+  install -d "$pkgdir/usr/share/java/$pkgbase/"{bin,lib}
+  install -m644 "$_build/lib/"*.jar "$pkgdir/usr/share/java/$pkgbase/lib"
+  install -m755 "$_build/bin/$pkgbase" "$pkgdir/usr/share/java/$pkgbase/bin"
+  install -d "$pkgdir/usr/bin"
+  ln -s "/usr/share/java/$pkgbase/bin/$pkgbase" "$pkgdir/usr/bin/$pkgbase" 
+}
+
+pkgname=("$pkgbase-git" "$pkgbase-dev-git")
+for _p in "${pkgname[@]}"; do
+  eval "package_$_p() {
+    $(declare -f "_package${_p#$pkgbase}")
+    _package${_p#$pkgbase}
+  }"
+done
