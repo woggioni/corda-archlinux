@@ -1,7 +1,7 @@
 # Contributor: Walter Oggioni <walter.oggioni@r3.com>                
 # Maintainer: Walter Oggioni <walter.oggioni@r3.com>
 pkgbase=corda-cli
-pkgver=150.7dd7e0f
+pkgver=155.c0229e5
 pkgrel=1
 pkgdesc="Command Line Interface Utility to deploy a Corda Network"
 arch=('i686' 'x86_64' 'armv7h' 'aarch64')
@@ -9,7 +9,7 @@ url="https://github.com/corda/corda-cli"
 license=('GPL')
 makedepends=('unzip' 'gradle' 'java-environment')
 depends=('java-environment>=11')
-source=('git+ssh://git@github.com/corda/corda-cli.git#branch=woggioni/cpb')
+source=('git+ssh://git@github.com/corda/corda-cli.git')
 md5sums=('SKIP')
 
 pkgver() {
