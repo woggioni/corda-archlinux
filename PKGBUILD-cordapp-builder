@@ -1,8 +1,8 @@
 # Contributor: Walter Oggioni <walter.oggioni@r3.com>                
 # Maintainer: Walter Oggioni <walter.oggioni@r3.com>
-pkgname=corda-cpibuilder-git
+pkgname=cordapp-builder-git
 _basename="${pkgname%-git}"
-pkgver=10131.31c7154027
+pkgver=10332.0847a61216
 pkgrel=1
 pkgdesc="Command Line Interface Utility to create Corda CPI archive"
 arch=('i686' 'x86_64' 'armv7h' 'aarch64')
@@ -10,9 +10,9 @@ url="https://github.com/corda/corda5"
 license=('GPL')
 makedepends=('unzip' 'gradle' 'java-environment')
 depends=('java-environment>=11')
-source=('git+ssh://git@github.com/corda/corda5.git#branch=woggioni/cpibuilder2')
+source=('git+ssh://git@github.com/corda/corda5.git#branch=release/os/5.0')
 md5sums=('SKIP')
-conflicts=('corda-cpibuilder')
+conflicts=('corda-cordapp-builder')
 
 pkgver() {
   cd $srcdir/corda5
@@ -21,14 +21,14 @@ pkgver() {
 
 build() {
   cd $srcdir/corda5
-  ./gradlew tools:cpibuilder:installDist
+  ./gradlew tools:cordapp-builder:installDist
 }
 
 package() {
-  _build="$srcdir/corda5/tools/cpibuilder/build/install/cpibuilder"
+  _build="$srcdir/corda5/tools/cordapp-builder/build/install/cordapp-builder"
   install -d "$pkgdir/usr/share/java/$_basename/"{bin,lib}
   install -m644 "$_build/lib/"*.jar "$pkgdir/usr/share/java/$_basename/lib"
-  install -m755 "$_build/bin/cpibuilder" "$pkgdir/usr/share/java/$_basename/bin/$_basename"
+  install -m755 "$_build/bin/cordapp-builder" "$pkgdir/usr/share/java/$_basename/bin/$_basename"
   install -d "$pkgdir/usr/bin"
   ln -s "/usr/share/java/$_basename/bin/$_basename" "$pkgdir/usr/bin/$_basename" 
 }

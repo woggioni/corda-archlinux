@@ -1,7 +1,7 @@
 # Contributor: Walter Oggioni <walter.oggioni@r3.com>                
 # Maintainer: Walter Oggioni <walter.oggioni@r3.com>
 pkgbase=corda-cli
-pkgver=155.c0229e5
+pkgver=164.8419784
 pkgrel=1
 pkgdesc="Command Line Interface Utility to deploy a Corda Network"
 arch=('i686' 'x86_64' 'armv7h' 'aarch64')
